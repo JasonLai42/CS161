@@ -1,0 +1,27 @@
+Jason Lai
+CS 161
+Dis 1A
+
+Homework #1
+
+1. (defun PAD (N) (cond 
+			((<= N 3) 1) 
+			(t (+ (PAD (- N 2)) (PAD (- N 3))))
+		  )
+   )
+
+(PAD 100) leads to crash/infinite loop/no result
+
+2. (defun SUMS (N) (cond 
+			((<= N 3) 0) 
+			(t (+ 1 (+ (SUMS (- N 2)) (SUMS (- N 3)))))
+		   )
+   )
+
+3. (defun ANON (TREE) (cond 
+			((null TREE) '())
+			((atom TREE) '?) 
+			((atom (car TREE)) (append '(?) (ANON (cdr TREE))))   
+			(t (append (list (ANON (car TREE))) (ANON (cdr TREE))))
+		      )
+   )

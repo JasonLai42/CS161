@@ -1,0 +1,129 @@
+(defun BFS (FRINGE) (cond 
+... ((null FRINGE) '()) 
+... ((atom (car FRINGE)) (append (list (car FRINGE)) (BFS (cdr FRINGE)))) 
+... (t (BFS (append (cdr FRINGE) (car FRINGE)))) 
+... ) 
+... )
+
+
+> (BFS '(ROOT))
+(ROOT)
+> (BFS '((((L E) F) T)))
+(T F L E)
+> (BFS '((R (I (G (H T))))))
+(R I G H T)
+> (BFS '(((A (B)) C (D))))
+(C A D B)
+> (BFS '((T (H R E) E)))
+(T E H R E)
+> (BFS '((A ((C ((E) D)) B))))
+(A B C D E)
+
+> (BFS '((1) 2 ((3)) 4 (((5))) (6) 7 ((8 (9)))))
+(2 4 7 1 6 3 8 5 9)
+> (BFS '(1 (2 ((3 4)) (5) (6 (7)) (8) 9)))
+(1 2 9 5 6 8 3 4 7)
+> (BFS '((((1))) ((2) 3 ((4 ((5) 6)) 7) 8) 9))
+(9 3 8 2 7 1 4 6 5)
+
+append will merge lists, so when we encounter a list, merge it at the end 
+of the argument to the next recursive step i.e. cdr FRINGE. This will unwrap
+the outermost layer of that list in the argument.
+
+
+TRUTHS:
+	- Homer moves with every action
+	- They all start on same side, so if Homer moves and baby is in pickle -> invalid
+		- Also means impossible for baby to be in pickle on side Homer is GOING to
+	- Baby move with homer means baby safe
+	- Passing same side check means we can just check Homer's side to move
+
+	West		East
+(I)	h,b,d,p				(NIL, NIL, NIL, NIL)
+
+(1)	d,p		h,b		(T, T, NIL, NIL)
+
+(2)	h,d,p		b		(NIL, T, NIL, NIL)
+	
+(3)	p		h,b,d		(T, T, T, NIL)
+
+(4)	h,b,p		d		(NIL, NIL, T, NIL)
+
+(5)	b		h,d,p		(T, NIL, T, T)
+
+(6)	h,b		d,p		(NIL, NIL, T, T)
+
+(G)			h,b,d,p		(T, T, T, T)
+
+
+ACTIONS
+
+	h:
+		- doesn't leave baby with dog or poison
+	b:
+		- make sure on same side
+		- since baby is with homer going to same side, no need to worry
+	d:
+		- make sure on same side
+		- make sure baby not left with poison
+		- baby waiting on other side is ok
+	p:
+		- make sure on same side
+		- make sure baby not left with dog
+		- baby waiting on other side is ok
+
+(defun SUCC-FN (S) 
+    (append 
+        (cond 
+            ((equal (NEXT-STATE S 'h) nil) '())
+            (t (NEXT-STATE S 'h))
+        )
+        (cond 
+            ((equal (NEXT-STATE S 'b) nil) '())
+            (t (NEXT-STATE S 'b))
+        )
+        (cond 
+            ((equal (NEXT-STATE S 'd) nil) '())
+            (t (NEXT-STATE S 'd))
+        )
+        (cond 
+            ((equal (NEXT-STATE S 'p) nil) '())
+            (t (NEXT-STATE S 'p))
+        )
+    )
+)
+
+
+FINAL-STATE
+> (FINAL-STATE '(T T T T))
+T
+> (FINAL-STATE '(T T T NIL))
+NIL
+
+NEXT-STATE
+> 
+
+>
+
+>
+
+SUCC-FN
+> 
+
+ON-PATH
+> (ON-PATH '(T T T T) '((NIL NIL NIL NIL) (T T NIL NIL) (NIL T NIL NIL) (T T T NIL) (NIL NIL T NIL) (T NIL T T) (NIL NIL T T)))
+NIL
+> (ON-PATH '(T NIL T T) '((NIL NIL NIL NIL) (T T NIL NIL) (NIL T NIL NIL) (T T T NIL) (NIL NIL T NIL) (T NIL T T) (NIL NIL T T)))
+T
+
+MULT-DFS
+
+DFS
+> (DFS '(NIL NIL NIL NIL) NIL)
+((NIL NIL NIL NIL) (T T NIL NIL) (NIL T NIL NIL) (T T T NIL) 
+(NIL NIL T NIL) (T NIL T T) (NIL NIL T T) (T T T T))
+> (DFS '(T T NIL NIL) '((NIL NIL NIL NIL) (T T NIL NIL) (NIL T NIL NIL)))
+NIL
+> (DFS '(NIL T NIL NIL) '((NIL NIL NIL NIL) (T T NIL NIL)))
+((NIL NIL NIL NIL) (T T NIL NIL) (NIL T NIL NIL) (T T T NIL) 
+(NIL NIL T NIL) (T NIL T T) (NIL NIL T T) (T T T T))

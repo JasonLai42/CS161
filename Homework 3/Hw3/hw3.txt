@@ -1,0 +1,99 @@
+
+Index from (0, 0)
+
+
+Heuristic:
+
+
+(time (a* p19 #'goal-test #'next-states #'h204995126))
+(printstates (a* p1 #'goal-test #'next-states #'h204995126) 0.2)
+
+(defun goal-test (s)
+	(cond 
+		((null s) t)
+		((not (= (count box (car s)) 0)) nil)
+		(t (goal-test (cdr s)))
+	)
+);end defun
+
+(setq test1 '((1 1 1 1 1 1 1)
+	      (1 0 0 0 0 4 1)
+	      (1 0 4 2 0 0 1)
+	      (1 0 2 0 0 0 1)
+	      (1 0 0 3 0 0 1)
+	      (1 0 0 0 0 0 1)
+	      (1 1 1 1 1 1 1)))
+
+(defun goal-test (s)
+	(let 
+		((current (car s))
+		 (the_rest (cdr s)))
+			(cond 
+				((null s) 
+					t);;;end is goal case
+				((atom current)
+					(cond 
+						((equal current '2) nil)
+						(t (goal-test the_rest))));;;end atom case
+				(t 
+					(and (goal-test current) (goal-test the_rest)));;;end list case
+			);;;end cond
+	);;;end let
+);end define
+
+
+
+(defun h1 (s)
+	(let 
+		((current (car s))
+		 (the_rest (cdr s)))
+			(cond 
+				((null s) 
+					0);;;end is goal case
+				((atom current)
+					(cond 
+						((equal current '2) (+ 1 (h1 the_rest)))
+						(t (h1 the_rest))));;;end atom case
+				(t 
+					(+ (h1 current) (h1 the_rest)));;;end list case
+			);;;end cond
+	);;;end let
+);;;end defun
+
+(defun get-k-dist (k b_list)
+	(cond
+		((null b_list) 0)
+		(t 
+			(+ 
+				(get-dist k (car b_list)) 
+				(get-k-dist k (cdr b_list))))
+	)
+)
+
+((1 1 1 1 1 1 1 1 1 1) (1 0 0 0 1 0 0 0 5 1) (1 0 0 0 0 0 3 5 5 1)
+  (1 0 0 0 0 1 1 5 4 1) (1 0 0 0 0 1 1 4 5 1) (1 1 1 1 1 1 0 0 0 0)))
+
+Evaluation took:
+  0.000 seconds of real time
+  0.000005 seconds of total run time (0.000005 user, 0.000000 system)
+  100.00% CPU
+  8,638 processor cycles
+  0 bytes consed
+  
+NIL
+
+;;; get-k-dist takes in the position of the keeper k and a list of box positions 
+;;; b_list for a given state, and returns the sum of the Manhattan distances 
+;;; between the keeper and each box in b_list.
+;;;
+;;; Basic idea: We iterate over b_list and call get-dist on the position of the keeper 
+;;; and the position of the current box we are looking at in b_list
+(defun get-k-dist (k b_list)
+	(cond
+		((null b_list) 0)
+		(t 
+			(+ 
+				(get-dist k (car b_list)) 
+				(get-k-dist k (cdr b_list))))
+	)
+)

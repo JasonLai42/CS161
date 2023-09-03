@@ -1,0 +1,44 @@
+Jason Lai
+204995126
+CS161 - Homework 4
+Dis 1A
+
+1. Use RSat to solve the SAT instance obtained above. Is the instance satisfiable?
+
+No, the SAT instance obtained from converting the graph coloring problem contained in 
+graph1.txt with 3 colors is not satisfiable.
+
+2. Do the conversion again, this time, with 4 colors. Use RSat to solve this new SAT 
+instance. Is the instance satisfiable?
+
+Yes, the new SAT instance obtained from converting the graph coloring problem  
+contained in graph1.txt with 4 colors is satisfiable.
+
+3. What do the answers of these two SAT instances tell you about the graph coloring 
+problem of the above graph? Can you give a solution (a coloring) to the graph coloring 
+problem of the above graph based on the results of RSat?
+
+The answers of the two SAT instances tell us that there does not exist a solution to the 
+graph coloring problem contained in graph1.txt using only 3 colors, but there does exist  
+a solution(s) using 4 colors. One possible solution to the graph coloring problem is as 
+follows: 
+
+Given colors 1 (red), 2 (green), 3 (blue), and 4 (yellow), 
+
+Node 1 gets color 1 (red)
+Node 2 gets color 2 (green)
+Node 3 gets color 3 (blue)
+Node 4 gets color 4 (yellow)
+Node 5 gets color 2 (green)
+Node 6 gets color 3 (blue)
+Node 7 gets color 4 (yellow)
+
+4. Now, use a similar approach to solve the graph coloring of the graph described in 
+graph2.txt. What is the minimum number of colors required to properly color this 
+graph?
+
+Using a similar approach to solve the graph coloring problem contained in graph2.txt, 
+I found that the minimum number of colors required to properly color this graph is 8. 
+I converted the graph coloring to SAT instances using 4, 5, 6, and 7 colors and used 
+RSat to solve them, until I found that 8 colors provided a satisfiable SAT instance as 
+indicated by RSat.
